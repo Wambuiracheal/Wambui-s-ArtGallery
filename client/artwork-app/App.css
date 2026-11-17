@@ -284,9 +284,8 @@ em {
   bottom: 28px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 24px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, .2);
 }
 .hero-count {
   font-family: var(--font-display);
@@ -296,18 +295,54 @@ em {
 }
 .hero-count strong { color: #fff; font-weight: 500; }
 
-.hero-dots { display: flex; gap: 8px; flex: 1; }
-.dot {
-  width: 28px;
-  height: 3px;
-  border: none;
-  padding: 0;
-  background: rgba(255, 255, 255, .3);
-  cursor: pointer;
-  transition: background .3s, width .4s var(--ease);
+/* Paint-dab slide picker: vertical column on the far right, centred */
+.hero-dabs {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  right: calc(var(--gutter) / 2);
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
 }
-.dot:hover { background: rgba(255, 255, 255, .7); }
-.dot.is-active { background: var(--accent); width: 56px; }
+@media (max-width: 600px) {
+  /* too little edge room on phones; the arrows still work there */
+  .hero-dabs { display: none; }
+}
+.dab {
+  --c: var(--pink);
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: none;
+  /* uneven radii make each dot look like a dab of paint */
+  border-radius: 58% 42% 55% 45% / 45% 55% 45% 55%;
+  background: var(--c);
+  opacity: .55;
+  cursor: pointer;
+  transition: opacity .3s, transform .4s var(--ease-soft), background .3s;
+}
+.dab:nth-child(4n + 2) { --c: var(--butter); border-radius: 45% 55% 40% 60% / 60% 40% 55% 45%; }
+.dab:nth-child(4n + 3) { --c: var(--mint);   border-radius: 52% 48% 60% 40% / 40% 60% 45% 55%; }
+.dab:nth-child(4n + 4) { --c: var(--lilac);  border-radius: 40% 60% 48% 52% / 55% 45% 60% 40%; }
+.dab:hover { opacity: 1; transform: scale(1.25) rotate(-10deg); }
+.dab.is-active {
+  --c: var(--accent);
+  opacity: 1;
+  transform: scale(1.45);
+  animation: dab-wobble 2.4s ease-in-out infinite;
+}
+@keyframes dab-wobble {
+  0%, 100% { transform: scale(1.45) rotate(0); }
+  25%      { transform: scale(1.5) rotate(-12deg); }
+  75%      { transform: scale(1.4) rotate(10deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dab.is-active { animation: none; }
+}
+
 
 .hero-arrows { display: flex; gap: 8px; }
 .icon-btn {
@@ -699,7 +734,5 @@ textarea { min-height: 140px; resize: vertical; }
   .page-head { flex-direction: column; align-items: flex-start; }
   .new-art-form { grid-template-columns: 1fr; }
   .hero-content { padding-bottom: 110px; }
-  .hero-dots { display: none; }
-  .hero-controls { justify-content: space-between; }
   .about-figure::before { inset: 16px -12px -16px 12px; }
 }

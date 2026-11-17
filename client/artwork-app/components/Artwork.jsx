@@ -118,20 +118,24 @@ const App = () => {
           </div>
         </div>
 
+        {/* Paint-dab slide picker down the right edge: each dab is a slide, the active one wobbles */}
+        <div className="hero-dabs">
+          {images.map((src, i) => (
+            <button
+              key={src}
+              type="button"
+              className={'dab' + (i === currentSlide ? ' is-active' : '')}
+              onClick={() => setCurrentSlide(i)}
+              aria-label={`Show slide ${i + 1}`}
+              aria-current={i === currentSlide}
+            />
+          ))}
+        </div>
+
         <div className="hero-controls">
           <span className="hero-count">
             <strong>{pad(currentSlide + 1)}</strong> / {pad(images.length)}
           </span>
-          <div className="hero-dots">
-            {images.map((src, i) => (
-              <button
-                key={src}
-                className={'dot' + (i === currentSlide ? ' is-active' : '')}
-                onClick={() => setCurrentSlide(i)}
-                aria-label={`Show slide ${i + 1}`}
-              />
-            ))}
-          </div>
           <div className="hero-arrows">
             <button className="icon-btn" onClick={prevSlide} aria-label="Previous slide">←</button>
             <button className="icon-btn" onClick={nextSlide} aria-label="Next slide">→</button>
