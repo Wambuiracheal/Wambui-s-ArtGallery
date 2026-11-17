@@ -40,11 +40,13 @@
 
 .home { overflow-x: clip; }
 
-/* Hero parallax: content drifts down & fades as you scroll */
+/* Hero parallax: content drifts down a little & fades as you scroll.
+   Kept short and quick so it's gone before reaching the slide controls
+   (counter / dots / arrows) pinned at the bottom of the hero. */
 .home .hero-content {
   animation: none;
-  transform: translateY(calc(var(--sy, 0) * .35px));
-  opacity: calc(1 - var(--sy, 0) / 650);
+  transform: translateY(calc(min(var(--sy, 0), 320) * .2px));
+  opacity: calc(1 - var(--sy, 0) / 320);
 }
 .home .hero-title { animation: wobble-in 1.4s var(--ease-soft) both; }
 .home .hero-lede,

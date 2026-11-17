@@ -191,9 +191,11 @@ body .btn:disabled { transform: none; }
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 .hgallery-track {
+  /* fills the space above the progress band, so cards never reach it */
+  flex: 1;
+  min-height: 0;
   display: flex;
   align-items: center;
   gap: clamp(24px, 3vw, 48px);
@@ -228,7 +230,7 @@ body .btn:disabled { transform: none; }
 .hgallery-card.is-high { transform: translateY(-6vh); }
 .hgallery-img {
   aspect-ratio: 3 / 4;
-  max-height: 58vh;
+  max-height: 54vh;
   border-radius: 24px;
   overflow: hidden;
   background: #e6e0d4;
@@ -278,18 +280,23 @@ body .btn:disabled { transform: none; }
 .hgallery-end-arrow { font-size: 1.4em; transition: transform .4s var(--ease); }
 .hgallery-end:hover .hgallery-end-arrow { transform: translateX(12px); }
 
+/* Small orange progress pill in its own band below the cards,
+   acting as the divider before the next section */
 .hgallery-progress {
-  position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
-  bottom: 28px;
-  height: 2px;
-  background: var(--line);
+  flex-shrink: 0;
+  align-self: center;
+  width: clamp(120px, 14vw, 200px);
+  height: 5px;
+  margin: 24px 0 32px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  overflow: hidden;
 }
 .hgallery-progress span {
   display: block;
   height: 100%;
-  background: var(--ink);
+  border-radius: inherit;
+  background: var(--accent);
   transform-origin: left;
   transform: scaleX(var(--hp, 0));
 }
