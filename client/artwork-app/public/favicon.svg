@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Horizon: an orange sun setting on the horizon line, in the site palette -->
+  <rect width="64" height="64" rx="14" fill="#f3efe7"/>
+  <path d="M14 40a18 18 0 0 1 36 0z" fill="#e2522b"/>
+  <rect x="8" y="40" width="48" height="5" rx="2.5" fill="#151413"/>
+  <rect x="18" y="49" width="28" height="3.5" rx="1.75" fill="#151413" opacity=".35"/>
+</svg>
