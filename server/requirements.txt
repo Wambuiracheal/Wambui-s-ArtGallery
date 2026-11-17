@@ -5,3 +5,4 @@ flask-cors
 flask-restful
 sqlalchemy-serializer
 gunicorn
+psycopg[binary]

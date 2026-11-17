@@ -177,7 +177,7 @@ const App = () => {
               <span key={k}>
                 {row === 0
                   ? <>Paint <b>✦</b> <i>Sculpt</i> <b>✦</b> Shoot <b>✦</b> <i>Collect</i> <b>✦</b> </>
-                  : <><i>Create</i> <b>●</b> Connect <b>●</b> <i>Exhibit</i> <b>●</b> Inspire <b>●</b> </>}
+                  : <>Create <b>✺</b> Connect <b>✺</b> Exhibit <b>✺</b> Inspire <b>✺</b> </>}
               </span>
             ))}
           </div>

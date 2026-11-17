@@ -76,7 +76,7 @@ class Artwork(db.Model, SerializerMixin):
     title = db.Column(db.String(120), nullable=False)
     image = db.Column(db.String(500), nullable=False)
     price = db.Column(db.Float, nullable=False)
-    category = db.Column(db.Enum(*CATEGORIES))
+    category = db.Column(db.Enum(*CATEGORIES, name='artwork_category'))  # Postgres needs a type name
     description = db.Column(db.Text)
     # available -> reserved (order placed) -> sold (paid)
     status = db.Column(db.String(20), nullable=False, server_default='available', default='available')

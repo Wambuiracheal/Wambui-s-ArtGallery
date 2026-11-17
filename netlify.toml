@@ -1,0 +1,14 @@
+# Netlify config for the React website (the Flask API is deployed separately on Render).
+[build]
+  base = "client/artwork-app"   # where package.json lives
+  command = "npm run build"
+  publish = "dist"              # relative to base
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Single-page app: send every route (/shop, /artists/3, ...) to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

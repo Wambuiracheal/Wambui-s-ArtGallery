@@ -15,11 +15,21 @@ from resources.users import UserDetailResource, UserListResource
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///art.db')
+database_url = os.environ.get('DATABASE_URL', 'sqlite:///art.db')
+# Hosts hand out postgres:// or postgresql:// — point both at the psycopg (v3) driver explicitly
+for prefix in ('postgres://', 'postgresql://'):
+    if database_url.startswith(prefix):
+        database_url = 'postgresql+psycopg://' + database_url[len(prefix):]
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_pre_ping': True}  # survive dropped DB connections
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Set SECRET_KEY in production — it signs login tokens
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-only-change-me')
-CORS(app)
+
+# FRONTEND_URL: comma-separated site address(es) allowed to call the API.
+# Unset (local development) = allow any origin.
+allowed_origins = [o.strip().rstrip('/') for o in os.environ.get('FRONTEND_URL', '').split(',') if o.strip()]
+CORS(app, origins=allowed_origins or '*')
 
 db.init_app(app)
 migrate = Migrate(app, db)
