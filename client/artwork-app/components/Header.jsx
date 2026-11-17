@@ -19,13 +19,38 @@ function Header() {
   const location = useLocation()
   const navigate = useNavigate()
 
+  const [hidden, setHidden] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
   // Close the mobile menu after navigating
   useEffect(() => setOpen(false), [location.pathname])
+
+  // Tuck the header away while scrolling down, bring it back on the way up
+  useEffect(() => {
+    let lastY = window.scrollY
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const y = window.scrollY
+      const delta = y - lastY
+      if (Math.abs(delta) > 4) {
+        setHidden(delta > 0 && y > 160)
+        lastY = y
+      }
+      setScrolled(y > 8)
+    }
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(frame)
+    }
+  }, [])
 
   const showCart = !user || user.role === 'customer'
 
   return (
-    <header className={'site-header' + (open ? ' menu-open' : '')}>
+    <header className={'site-header' + (open ? ' menu-open' : '') + (hidden && !open ? ' is-hidden' : '') + (scrolled ? ' is-scrolled' : '')}>
       <Link to="/" className="brand">
         Horizon<span className="brand-dot">.</span>
       </Link>

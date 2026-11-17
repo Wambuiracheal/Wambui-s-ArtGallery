@@ -10,9 +10,8 @@ body::after {
   inset: -50%;
   z-index: 200;
   pointer-events: none;
-  opacity: .07;
+  opacity: .045;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain 1.2s steps(5) infinite;
 }
 @keyframes grain {
   0%   { transform: translate(0, 0); }
@@ -46,9 +45,9 @@ body::after {
   border-radius: 50%;
   border: 1.5px solid var(--ink);
   transition:
-    width .35s cubic-bezier(.34, 1.56, .64, 1),
-    height .35s cubic-bezier(.34, 1.56, .64, 1),
-    margin .35s cubic-bezier(.34, 1.56, .64, 1),
+    width .35s var(--ease-soft),
+    height .35s var(--ease-soft),
+    margin .35s var(--ease-soft),
     background .25s, border-color .25s, transform .15s;
 }
 .cursor-link .cursor-ring {
@@ -72,7 +71,7 @@ body::after {
   font-size: 22px;
   font-weight: 700;
   color: #fff;
-  animation: wobble-in .35s cubic-bezier(.34, 1.56, .64, 1) both;
+  animation: wobble-in .35s var(--ease-soft) both;
 }
 
 /* ---------- Magnetic buttons (Cursor.jsx sets --mx / --my) ---------- */
@@ -82,7 +81,7 @@ body .cart-link {
   transform: translate(var(--mx, 0px), var(--my, 0px));
 }
 body .btn:hover {
-  transform: translate(var(--mx, 0px), calc(var(--my, 0px) - 2px)) rotate(-1deg);
+  transform: translate(var(--mx, 0px), calc(var(--my, 0px) - 2px));
 }
 body .btn:disabled { transform: none; }
 
@@ -95,14 +94,15 @@ body .btn:disabled { transform: none; }
   place-items: center;
   background: var(--ink);
   pointer-events: none;
-  animation: curtain-up .85s cubic-bezier(.76, 0, .24, 1) .15s both;
+  animation: curtain-up .7s var(--ease-inout) .1s both;
 }
 .curtain-word {
   font-family: var(--font-display);
   font-size: clamp(40px, 8vw, 96px);
   font-weight: 600;
   color: var(--paper);
-  animation: curtain-word .6s var(--ease) both;
+  font-size: clamp(32px, 5vw, 64px);
+  animation: curtain-word .5s var(--ease) both;
 }
 .curtain-word i { font-style: normal; color: var(--accent); }
 @keyframes curtain-up {
@@ -150,8 +150,9 @@ body .btn:disabled { transform: none; }
 .hgallery { position: relative; }
 .hgallery-sticky {
   position: sticky;
-  top: var(--header-h);
-  height: calc(100vh - var(--header-h));
+  top: 0;
+  height: 100vh;
+  padding-top: var(--header-h);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -235,10 +236,10 @@ body .btn:disabled { transform: none; }
   font-weight: 600;
   line-height: 1.1;
   text-align: center;
-  transition: transform .5s cubic-bezier(.34, 1.56, .64, 1);
+  transition: transform .5s var(--ease-soft);
 }
 .hgallery-end em { color: var(--butter); }
-.hgallery-end:hover { transform: scale(1.05) rotate(-4deg); }
+.hgallery-end:hover { transform: scale(1.04); }
 .hgallery-end-arrow { font-size: 1.4em; transition: transform .4s var(--ease); }
 .hgallery-end:hover .hgallery-end-arrow { transform: translateX(12px); }
 
@@ -320,7 +321,7 @@ body .btn:disabled { transform: none; }
 .artist-row-count { font-size: 14px; color: var(--muted); white-space: nowrap; }
 .artist-row-arrow {
   font-size: clamp(24px, 3vw, 40px);
-  transition: transform .45s cubic-bezier(.34, 1.56, .64, 1);
+  transition: transform .45s var(--ease-soft);
 }
 .artist-row.is-active .artist-row-arrow { transform: rotate(45deg) scale(1.2); color: var(--accent); }
 .artist-reveal-all { margin-top: 32px; }
@@ -337,7 +338,7 @@ body .btn:disabled { transform: none; }
   overflow: hidden;
   opacity: 0;
   scale: .6;
-  transition: opacity .3s, scale .45s cubic-bezier(.34, 1.56, .64, 1);
+  transition: opacity .3s, scale .45s var(--ease-soft);
   box-shadow: 0 30px 60px -20px rgba(30, 20, 10, .5);
 }
 .artist-float.is-visible { opacity: 1; scale: 1; }
@@ -360,8 +361,16 @@ body .btn:disabled { transform: none; }
   .artist-row-count, .artist-row-arrow { display: none; }
 }
 
+/* ---------- Auto-hiding header ---------- */
+.site-header {
+  transition: transform .6s var(--ease), box-shadow .4s var(--ease), background .4s var(--ease);
+}
+.site-header.is-hidden { transform: translateY(-100%); }
+.site-header.is-scrolled { box-shadow: 0 10px 30px -18px rgba(20, 15, 10, .35); }
+
 /* ---------- Motion safety ---------- */
 @media (prefers-reduced-motion: reduce) {
+  .site-header.is-hidden { transform: none; }
   body::after { animation: none; }
   .curtain { display: none; }
   .kinetic-row.row-0, .kinetic-row.row-1 { transform: none; }

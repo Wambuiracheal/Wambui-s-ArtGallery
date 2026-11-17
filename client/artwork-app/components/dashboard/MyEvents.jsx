@@ -1,3 +1,4 @@
+import { scrollToTop } from '../fx/smoothScroll'
 import { useEffect, useState } from 'react'
 import { api } from '../../api'
 import { useAuth } from '../../context/AuthContext'
@@ -111,7 +112,7 @@ function MyEvents() {
         {events.map(ev => (
           <EventCard key={ev.id} event={ev} showArtist={false}>
             <button type="button" className="link-btn"
-              onClick={() => { setEditing(ev); setShowForm(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
+              onClick={() => { setEditing(ev); setShowForm(false); scrollToTop({ smooth: true }) }}>
               Edit
             </button>
             <button type="button" className="link-btn danger" onClick={() => remove(ev)}>Delete</button>

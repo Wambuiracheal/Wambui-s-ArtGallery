@@ -1,3 +1,4 @@
+import { scrollToTop } from '../fx/smoothScroll'
 import { useEffect, useState } from 'react'
 import { api } from '../../api'
 import { useAuth } from '../../context/AuthContext'
@@ -77,7 +78,7 @@ function MyArtworks() {
           <li key={a.id}>
             <ArtTile art={a} showArtist={false}>
               <button type="button" className="link-btn"
-                onClick={() => { setEditing(a); setShowForm(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
+                onClick={() => { setEditing(a); setShowForm(false); scrollToTop({ smooth: true }) }}>
                 Edit
               </button>
               {a.status === 'available' && (

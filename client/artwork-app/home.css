@@ -11,6 +11,7 @@
     clip-path 1.1s var(--ease) var(--delay, 0ms);
   will-change: opacity, transform;
 }
+.reveal.is-visible { will-change: auto; }
 /* Masked wipe-up reveal */
 .reveal-clip { opacity: 1; clip-path: inset(100% 0 0 0); transform: translateY(30px); }
 .reveal-clip.is-visible { clip-path: inset(0 0 0 0); }
@@ -18,10 +19,9 @@
 .reveal-left  { transform: translateX(-70px); }
 .reveal-right { transform: translateX(70px); }
 .reveal-zoom  { transform: scale(.85); }
-.reveal-tilt  { transform: translateY(70px) rotate(-7deg); }
+.reveal-tilt  { transform: translateY(60px) rotate(-2deg); }
 .reveal-pop   {
-  transform: scale(.55) rotate(8deg);
-  transition-timing-function: cubic-bezier(.34, 1.56, .64, 1);
+  transform: translateY(40px) scale(.94);
 }
 .reveal.is-visible { opacity: 1; transform: none; }
 
@@ -46,7 +46,7 @@
   transform: translateY(calc(var(--sy, 0) * .35px));
   opacity: calc(1 - var(--sy, 0) / 650);
 }
-.home .hero-title { animation: wobble-in 1.2s cubic-bezier(.34, 1.56, .64, 1) both; }
+.home .hero-title { animation: wobble-in 1.4s var(--ease-soft) both; }
 .home .hero-lede,
 .home .hero-actions,
 .home .hero-content .eyebrow { animation: rise .9s var(--ease) .35s both; }
@@ -181,7 +181,7 @@
   object-fit: cover;
   transition: transform .8s var(--ease);
 }
-.featured-card:hover img { transform: scale(1.08) rotate(1deg); }
+.featured-card:hover img { transform: scale(1.06); }
 .featured-label {
   position: absolute;
   left: 14px;
@@ -217,10 +217,10 @@
   border-radius: 28px;
   border: 2px solid var(--ink);
   box-shadow: 6px 6px 0 var(--ink);
-  transition: transform .3s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s var(--ease);
+  transition: transform .3s var(--ease-soft), box-shadow .3s var(--ease);
 }
 .room-card:hover {
-  transform: translate(-4px, -6px) rotate(-1.5deg);
+  transform: translateY(-6px);
   box-shadow: 10px 12px 0 var(--ink);
 }
 .tone-pink { background: var(--pink); }
@@ -230,9 +230,9 @@
   font-size: 48px;
   line-height: 1;
   display: inline-block;
-  transition: transform .4s cubic-bezier(.34, 1.56, .64, 1);
+  transition: transform .4s var(--ease-soft);
 }
-.room-card:hover .room-emoji { transform: scale(1.2) rotate(-12deg); }
+.room-card:hover .room-emoji { transform: scale(1.12) rotate(-6deg); }
 .room-card h3 { font-family: var(--font-display); font-weight: 600; font-size: 30px; }
 .room-card p { color: var(--ink-soft); }
 .room-go { margin-top: auto; font-family: var(--font-hand); font-size: 24px; font-weight: 700; }
@@ -278,8 +278,8 @@
 /* Bouncy buttons everywhere */
 .btn-outline { background: transparent; color: var(--ink); border: 2px solid var(--ink); }
 .btn-outline:hover { background: var(--ink); color: var(--paper); }
-.btn { transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease), transform .3s cubic-bezier(.34, 1.56, .64, 1); }
-.btn:hover { transform: translateY(-2px) rotate(-1deg); }
+.btn { transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease), transform .3s var(--ease-soft); }
+.btn:hover { transform: translateY(-2px); }
 
 @keyframes float {
   0%, 100% { transform: translateY(0) rotate(0); }
@@ -291,7 +291,7 @@
   100% { transform: translateY(0); opacity: 0; }
 }
 @keyframes wobble-in {
-  0%   { opacity: 0; transform: translateY(30px) rotate(-3deg) scale(.95); }
+  0%   { opacity: 0; transform: translateY(30px) scale(.98); }
   100% { opacity: 1; transform: none; }
 }
 

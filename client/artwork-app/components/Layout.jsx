@@ -1,14 +1,20 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import Cursor from './fx/Cursor.jsx'
+import { scrollToTop, startSmoothScroll, stopSmoothScroll } from './fx/smoothScroll.js'
 import Header from './Header.jsx'
 
 function Layout() {
   const { pathname } = useLocation()
 
+  useEffect(() => {
+    startSmoothScroll()
+    return stopSmoothScroll
+  }, [])
+
   // New page → start at the top
   useEffect(() => {
-    window.scrollTo(0, 0)
+    scrollToTop()
   }, [pathname])
 
   return (

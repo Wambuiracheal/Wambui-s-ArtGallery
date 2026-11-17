@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Reveal from './Reveal';
 import ArtistReveal from './fx/ArtistReveal';
@@ -26,18 +26,18 @@ const rooms = [
 const pad = (n) => String(n).padStart(2, '0');
 
 /* Tiny hand-drawn doodles */
-const Star = ({ className }) => (
-  <svg className={`doodle ${className}`} viewBox="0 0 40 40" aria-hidden="true">
+const Star = ({ className, ...rest }) => (
+  <svg className={`doodle ${className}`} viewBox="0 0 40 40" aria-hidden="true" {...rest}>
     <path d="M20 3l4.5 11.5L37 16l-9.5 8 3 12.5L20 30l-10.5 6.5 3-12.5L3 16l12.5-1.5z" />
   </svg>
 );
-const Squiggle = ({ className }) => (
-  <svg className={`doodle line ${className}`} viewBox="0 0 120 30" aria-hidden="true">
+const Squiggle = ({ className, ...rest }) => (
+  <svg className={`doodle line ${className}`} viewBox="0 0 120 30" aria-hidden="true" {...rest}>
     <path d="M3 15c12-14 22-14 30 0s18 14 28 0 20-14 28 0 18 14 28 0" />
   </svg>
 );
-const Blob = ({ className }) => (
-  <svg className={`doodle ${className}`} viewBox="0 0 200 200" aria-hidden="true">
+const Blob = ({ className, ...rest }) => (
+  <svg className={`doodle ${className}`} viewBox="0 0 200 200" aria-hidden="true" {...rest}>
     <path d="M45.3,-58.6C57.6,-47.3,65.5,-31.6,69.4,-14.6C73.3,2.4,73.2,20.6,65.1,34.3C57,48,40.9,57.2,23.9,63.6C6.9,70,-11,73.6,-27.6,68.6C-44.2,63.6,-59.5,50,-67.5,33.2C-75.5,16.4,-76.2,-3.6,-70,-20.9C-63.8,-38.2,-50.7,-52.8,-35.6,-63.5C-20.5,-74.2,-3.4,-81,12.2,-77.9C27.8,-74.8,33,-69.9,45.3,-58.6Z" transform="translate(100 100)" />
   </svg>
 );
@@ -59,16 +59,20 @@ const App = () => {
     return () => clearTimeout(timer);
   }, [currentSlide]);
 
-  // Expose scroll position + progress as CSS variables for parallax effects
+  // Feed scroll position to the few elements that use it (data-sy) instead of
+  // the root — a root-level variable forces a style recalc of the whole page every frame.
+  const homeRef = useRef(null);
   useEffect(() => {
     const root = document.documentElement;
+    const targets = homeRef.current.querySelectorAll('[data-sy]');
+    const bar = homeRef.current.querySelector('.scroll-progress');
     let frame = 0;
     const update = () => {
       frame = 0;
       const y = window.scrollY;
       const max = root.scrollHeight - window.innerHeight || 1;
-      root.style.setProperty('--sy', y);
-      root.style.setProperty('--progress', Math.min(y / max, 1));
+      targets.forEach(el => el.style.setProperty('--sy', y));
+      bar.style.transform = `scaleX(${Math.min(y / max, 1)})`;
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -80,13 +84,11 @@ const App = () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
       cancelAnimationFrame(frame);
-      root.style.removeProperty('--sy');
-      root.style.removeProperty('--progress');
     };
   }, []);
 
   return (
-    <div className="home">
+    <div className="home" ref={homeRef}>
       <div className="scroll-progress" aria-hidden="true" />
 
       {/* ---------- Hero ---------- */}
@@ -101,7 +103,7 @@ const App = () => {
         ))}
         <div className="hero-shade" />
 
-        <div className="hero-content">
+        <div className="hero-content" data-sy>
           <p className="eyebrow light">Contemporary Art Gallery</p>
           <h1 className="hero-title">
             Art that holds<br />
@@ -136,7 +138,7 @@ const App = () => {
           </div>
         </div>
 
-        <div className="scroll-cue" aria-hidden="true">
+        <div className="scroll-cue" aria-hidden="true" data-sy>
           <span>scroll</span>
           <i />
         </div>
@@ -154,9 +156,9 @@ const App = () => {
 
       {/* ---------- Statement (word-by-word reveal) ---------- */}
       <section className="statement">
-        <Blob className="blob blob-a" />
+        <Blob className="blob blob-a" data-sy />
         <Star className="star star-a" />
-        <Squiggle className="squiggle-a" />
+        <Squiggle className="squiggle-a" data-sy />
         <Reveal as="p" className="eyebrow">Hello, art lover</Reveal>
         <h2 className="statement-text">
           {statement.map((word, i) => (
@@ -170,7 +172,7 @@ const App = () => {
       {/* ---------- Kinetic type (rows slide opposite ways on scroll) ---------- */}
       <section className="kinetic" aria-hidden="true">
         {[0, 1].map(row => (
-          <div key={row} className={`kinetic-row row-${row}`}>
+          <div key={row} className={`kinetic-row row-${row}`} data-sy>
             {Array.from({ length: 4 }).map((_, k) => (
               <span key={k}>
                 {row === 0
@@ -222,7 +224,7 @@ const App = () => {
 
       {/* ---------- Call to action ---------- */}
       <section className="cta">
-        <Blob className="blob blob-b" />
+        <Blob className="blob blob-b" data-sy />
         <Squiggle className="squiggle-b" />
         <Reveal variant="zoom" className="cta-inner">
           <h2 className="section-title">Got a piece the world <em>should see?</em></h2>
